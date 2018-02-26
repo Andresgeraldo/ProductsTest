@@ -13,7 +13,7 @@ namespace ProductsTest
         {
             InitializeComponent();
 
-            MainPage = new ProductsTest.MainPage();
+            MainPage = new ProductsTest.Pages.MainPage();
         }
 
         protected override void OnStart()
