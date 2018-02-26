@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
+﻿using System.Data.Entity;
 using System.Threading.Tasks;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using ProductsTest.BackEnd.Models;
 using ProductsTest.Domain;
+using ProductsTest.BackEnd.Helpers;
+using System;
 
 namespace ProductsTest.BackEnd.Controllers
 {
@@ -50,17 +47,46 @@ namespace ProductsTest.BackEnd.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ProductId,CategoryId,Description,Price,IsActive,Stock,LastPurchase,Remarks")] Product product)
+        public async Task<ActionResult> Create(ProductView view)
         {
             if (ModelState.IsValid)
             {
+                var pic = string.Empty;
+                var folder = "~/Content/Images";
+
+                if (view.ImageFile != null)
+                {
+                    pic = FilesHelper.UploadPhoto(view.ImageFile, folder);
+                    pic = string.Format("{0}/{1}", folder, pic);
+                }
+
+                var product = ToProduct(view);
+                product.Image = pic;
+
                 db.Products.Add(product);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "Description", product.CategoryId);
-            return View(product);
+            ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "Description", view.CategoryId);
+            return View(view);
+        }
+
+        private Product ToProduct(ProductView view)
+        {
+            return new Product
+            {
+                Category = view.Category,
+                CategoryId = view.CategoryId,
+                Description = view.Description,
+                Image = view.Image,
+                IsActive = view.IsActive,
+                LastPurchase = view.LastPurchase,
+                Price = view.Price,
+                ProductId = view.ProductId,
+                Remarks = view.Remarks,
+                Stock = view.Stock
+            };
         }
 
         // GET: Products/Edit/5
@@ -76,15 +102,30 @@ namespace ProductsTest.BackEnd.Controllers
                 return HttpNotFound();
             }
             ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "Description", product.CategoryId);
-            return View(product);
+            var VIEW = ToView(product);
+            return View(view);
         }
 
-        // POST: Products/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        private ProductView ToView(Product product)
+        {
+            return new ProductView
+            {
+                Category = product.Category,
+                CategoryId = product.CategoryId,
+                Description = product.Description,
+                Image = product.Image,
+                IsActive = product.IsActive,
+                LastPurchase = product.LastPurchase,
+                Price = product.Price,
+                ProductId = product.ProductId,
+                Remarks = product.Remarks,
+                Stock = product.Stock
+            };
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ProductId,CategoryId,Description,Price,IsActive,Stock,LastPurchase,Remarks")] Product product)
+        public async Task<ActionResult> Edit(Product product)
         {
             if (ModelState.IsValid)
             {

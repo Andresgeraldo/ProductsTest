@@ -29,6 +29,8 @@
         [Display(Name = "Ultima Compra?")]
         [DataType(DataType.Date)]
         public DateTime LastPurchase { get; set; }
+                
+        public string Image { get; set; }
 
         [DataType(DataType.MultilineText)]
         public string Remarks { get; set; }
