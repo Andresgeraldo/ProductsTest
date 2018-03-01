@@ -24,6 +24,7 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
+                            
                             <ViewCell.ContextActions>
                                 <MenuItem 
                                     Command="{Binding EditCommand}" 
@@ -35,6 +36,7 @@
                                     Text="Delete">
                                 </MenuItem>
                             </ViewCell.ContextActions>
+                            
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>

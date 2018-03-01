@@ -6,12 +6,16 @@
     using System.ComponentModel;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Windows.Input;
+    using GalaSoft.MvvmLight.Command;
+    using System.Threading.Tasks;
 
     public class CategoriesViewModel : INotifyPropertyChanged
     {
         #region Atributos
         public ObservableCollection<Category> _categories;
         List<Category> categories;
+        bool _isRefreshing;
         #endregion
 
         #region Servicios
@@ -47,6 +51,7 @@
         #region Metodos
         async void LoadCategories()
         {
+            IsRefreshing = true;
             var connection = await apiService.CheckConnection();
 
             if (!connection.IsSuccess)
@@ -74,15 +79,63 @@
             categories = (List<Category>)response.Result; //como esto devuelve un objeto lo puedo castear a una lista de lo que desee, en este caso una lista de categoria
 
             CategoriesList = new ObservableCollection<Category>(categories.OrderBy(c => c.Description)); //como la view recibe una observable colection convertimos la lista que recibimos de categorias en una observable colection de la clase 
-
+            IsRefreshing = false;
         }
 
         public void AddCategory(Category category)
         {
+            IsRefreshing = true;
             //CategoriesList.Add(category);
             categories.Add(category);
             CategoriesList = new ObservableCollection<Category>(categories.OrderBy(c => c.Description)); //como la view recibe una observable colection convertimos la lista que recibimos de categorias en una observable colection de la clase 
+            IsRefreshing = false;
+        }
+        public void UpdateCategory(Category category)
+        {
+            IsRefreshing = true;
+            var oldCategory = categories.Where(
+                                         c => c.CategoryId == category.CategoryId).FirstOrDefault();
+            oldCategory = category;
 
+            categories.Add(category);
+            CategoriesList = new ObservableCollection<Category>(categories.OrderBy(c => c.Description)); //como la view recibe una observable colection convertimos la lista que recibimos de categorias en una observable colection de la clase 
+            IsRefreshing = false;
+        }
+        public async Task DeleteCategory(Category category)
+        {
+            IsRefreshing = true;
+
+            var connection = await apiService.CheckConnection();
+            if (!connection.IsSuccess)
+            {
+                IsRefreshing = false;
+                await dialogService.ShowMessage("Error", connection.Message);
+                return;
+            }
+
+            var mainViewModel = MainViewModel.GetInstance();
+
+            var response = await apiService.Delete(
+                "http://productzuluapi.azurewebsites.net",
+                "/api",
+                "/Categories",
+                mainViewModel.Token.TokenType,
+                mainViewModel.Token.AccessToken,
+                category);
+
+            if (!response.IsSuccess)
+            {
+                IsRefreshing = false;
+                await dialogService.ShowMessage("Error",
+                    response.Message);
+                return;
+            }
+
+            categories.Remove(category);
+            CategoriesList = new ObservableCollection<Category>(
+                             categories.OrderBy(c => c.Description)); //como la view recibe una observable colection convertimos la lista que recibimos de categorias en una observable colection de la clase 
+
+            IsRefreshing = false;
         }
         #endregion
 
@@ -98,6 +151,25 @@
 
                 }
             }
+        }
+        public bool IsRefreshing
+        {
+            get { return _isRefreshing; }
+            set {
+                if (_isRefreshing != value)
+                {
+                    _isRefreshing = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsRefreshing)));
+
+                }
+            }
+        }
+        #endregion
+
+        #region Comandos
+        public ICommand RefreshCommand
+        {
+            get { return new RelayCommand(LoadCategories); }
         }
         #endregion
     }
