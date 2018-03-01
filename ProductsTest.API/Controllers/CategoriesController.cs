@@ -1,5 +1,6 @@
 ﻿namespace ProductsTest.API.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
@@ -27,22 +28,25 @@
 
                 foreach (var product in category.Products)
                 {
-                    productsResponse.Add(new ProductResponse {
-                    Description= product.Description,
-                    Image=product.Image,
-                    IsActive= product.IsActive,
-                    LastPurchase= product.LastPurchase,
-                    Price=product.Price,
-                    ProductId=product.ProductId,
-                    Remarks=product.Remarks,Stock=product.Stock});
+                    productsResponse.Add(new ProductResponse
+                    {
+                        Description = product.Description,
+                        Image = product.Image,
+                        IsActive = product.IsActive,
+                        LastPurchase = product.LastPurchase,
+                        Price = product.Price,
+                        ProductId = product.ProductId,
+                        Remarks = product.Remarks,
+                        Stock = product.Stock
+                    });
 
                 }
 
                 categoriesResponse.Add(new CategoryResponse
                 {
-                    CategoryId=category.CategoryId,
-                    Description=category.Description,
-                    Products=productsResponse
+                    CategoryId = category.CategoryId,
+                    Description = category.Description,
+                    Products = productsResponse
                 });
 
             }
@@ -108,7 +112,23 @@
             }
 
             db.Categories.Add(category);
-            await db.SaveChangesAsync();
+
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                if (ex.InnerException != null && ex.InnerException.InnerException != null
+                      && ex.InnerException.InnerException.Message.Contains("Index"))
+                {
+                    return BadRequest("There are a record with the same description");
+                }
+                else {
+                    return BadRequest(ex.Message);
+                }
+                
+            }
 
             return CreatedAtRoute("DefaultApi", new { id = category.CategoryId }, category);
         }

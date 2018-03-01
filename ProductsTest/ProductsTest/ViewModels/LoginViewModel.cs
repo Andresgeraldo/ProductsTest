@@ -1,18 +1,12 @@
 ﻿namespace ProductsTest.ViewModels
 {
-
-
     using GalaSoft.MvvmLight.Command;
-    using System;
     using System.ComponentModel;
     using System.Windows.Input;
     using Services;
-    using Xamarin.Forms;
-    using ProductsTest.Views;
 
     public class LoginViewModel : INotifyPropertyChanged
     {
-
 
         #region Atributos
         string _email;
@@ -84,8 +78,9 @@
             mainViewModel.Token = response;
             mainViewModel.Categories = new CategoriesViewModel();
 
-            await Application.Current.MainPage.Navigation.PushAsync(new CategoriesView());
-
+            //una view model no debe conocer una view ni viceversa, es pecado que una viewmodel vea las views (pages)
+            // await Application.Current.MainPage.Navigation.PushAsync(new CategoriesView());
+            await navigationService.NavigateOnLogin("CategoriesView");
             Email = null;
             Password = null;
             IsRunning = false;
@@ -101,6 +96,7 @@
             IsToggled = true;
             dialogService = new DialogService();
             apiService = new ApiService();
+            navigationService = new NavigationService();
         }
         #endregion
 
@@ -183,6 +179,7 @@
         #region Services
         DialogService dialogService;
         ApiService apiService;
+        NavigationService navigationService;
         #endregion
 
     }
