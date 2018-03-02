@@ -87,17 +87,34 @@
             {
                 await db.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (!CategoryExists(id))
+                if (ex.InnerException != null && ex.InnerException.InnerException != null
+                      && ex.InnerException.InnerException.Message.Contains("Index"))
                 {
-                    return NotFound();
+                    return BadRequest("There are a record with the same description");
                 }
                 else
                 {
-                    throw;
+                    return BadRequest(ex.Message);
                 }
+
             }
+            //try
+            //{
+            //    await db.SaveChangesAsync();
+            //}
+            //catch (DbUpdateConcurrencyException)
+            //{
+            //    if (!CategoryExists(id))
+            //    {
+            //        return NotFound();
+            //    }
+            //    else
+            //    {
+            //        throw;
+            //    }
+            //}
 
             return StatusCode(HttpStatusCode.NoContent);
         }
@@ -124,10 +141,11 @@
                 {
                     return BadRequest("There are a record with the same description");
                 }
-                else {
+                else
+                {
                     return BadRequest(ex.Message);
                 }
-                
+
             }
 
             return CreatedAtRoute("DefaultApi", new { id = category.CategoryId }, category);
@@ -144,7 +162,23 @@
             }
 
             db.Categories.Remove(category);
-            await db.SaveChangesAsync();
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                if (ex.InnerException != null && ex.InnerException.InnerException != null
+                      && ex.InnerException.InnerException.Message.Contains("REFERENCE"))
+                {
+                    return BadRequest("You cant delete this record because it has related records");
+                }
+                else
+                {
+                    return BadRequest(ex.Message);
+                }
+
+            }
 
             return Ok(category);
         }

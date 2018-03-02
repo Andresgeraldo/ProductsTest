@@ -73,8 +73,8 @@
             dialogService = new DialogService();
             navigationService = new NavigationService();
 
-            Description = category.Description;
-
+            Description = category.Description; //porque ya se a quien es que estoy editando porque fue pasado al constructor por el edit de la clase category
+            
             IsEnabled = true;
         }
         #endregion
@@ -131,7 +131,7 @@
             }
 
             var categoriesViewModel = CategoriesViewModel.GetInstance();
-            categoriesViewModel.Update(category);
+            categoriesViewModel.UpdateCategory(category);
 
             await navigationService.BackOnMaster();
 
