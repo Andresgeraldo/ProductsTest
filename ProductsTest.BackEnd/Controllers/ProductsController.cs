@@ -102,7 +102,7 @@ namespace ProductsTest.BackEnd.Controllers
                 return HttpNotFound();
             }
             ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "Description", product.CategoryId);
-            var VIEW = ToView(product);
+            var view = ToView(product);
             return View(view);
         }
 

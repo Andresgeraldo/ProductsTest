@@ -21,5 +21,6 @@
 
         public DbSet<Product> Products { get; set; }
 
+        public System.Data.Entity.DbSet<ProductsTest.Domain.Customer> Customers { get; set; }
     }
 }

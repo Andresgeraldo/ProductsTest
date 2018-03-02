@@ -1,4 +1,5 @@
-﻿namespace ProductsTest.API.Controllers
+﻿
+namespace ProductsTest.API.Controllers
 {
     using Domain;
     using Helpers;
