@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ProductsTest.Views.LoginView"
+             BackgroundColor="{StaticResource BackgroundColor}"
              BindingContext="{Binding Main,Source={StaticResource Locator}}"
              Title="Login">
     <ContentPage.Content>
@@ -12,8 +13,9 @@
             <Label  
                     FontAttributes="Bold"
                     FontSize="Large"
-                    Text="Welcome to Xamarin.Forms!"
+                    Text="Products"
                     VerticalOptions="CenterAndExpand" 
+                    TextColor="{StaticResource FontColor}"
                     HorizontalOptions="CenterAndExpand" />
             <Grid
                     Margin="50,10">
@@ -26,6 +28,7 @@
                         Grid.Column="0"
                         Grid.Row="0"
                         Text="Email"
+                        TextColor="{StaticResource FontColor}"
                         VerticalOptions="Center">
                 </Label>
                 <Entry
@@ -46,7 +49,8 @@
                         Grid.Row="1"
                         IsPassword="True"
                         Placeholder="Enter your password"
-                        Text="{Binding Password,Mode=TwoWay}">
+                        Text="{Binding Password,Mode=TwoWay}"
+                        TextColor="{StaticResource FontColor}">
                 </Entry>
             </Grid>
             <StackLayout 
@@ -62,7 +66,7 @@
             <Label
                         HorizontalOptions="Center"
                         Text="Forgot your password?"
-                        TextColor="Blue">
+                         TextColor="{StaticResource MainColor}">
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer
                         Command="{Binding RecoverPasswordCommand}">

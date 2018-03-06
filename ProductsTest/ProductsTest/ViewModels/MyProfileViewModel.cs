@@ -3,6 +3,7 @@
     using System.ComponentModel;
     using System.Windows.Input;
     using GalaSoft.MvvmLight.Command;
+    using ProductsTest.Models;
     using Services;
     using Xamarin.Forms;
 

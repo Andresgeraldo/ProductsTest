@@ -30,7 +30,6 @@
                 var location = await locator.GetPositionAsync();
                 Latitude = location.Latitude;
                 Longitude = location.Longitude;
-
             }
             catch (Exception ex)
             {

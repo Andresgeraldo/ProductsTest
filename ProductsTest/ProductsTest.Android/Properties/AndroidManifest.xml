@@ -7,5 +7,14 @@
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-	<application android:label="ProductsTest.Android"></application>
+	<uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<application android:label="ProductsTest.Android" android:icon="@drawable/noimage">	
+        <meta-data 
+            android:name="com.google.android.maps.v2.API_KEY" 
+            android:value="AIzaSyA5p-t7wg0SYtTgo8d3RUj_fzO6dQMQRqw" />       
+	</application>
+	
 </manifest>

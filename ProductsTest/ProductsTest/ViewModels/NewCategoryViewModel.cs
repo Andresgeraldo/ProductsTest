@@ -131,7 +131,7 @@
 
             category = (Category)response.Result;
             var categoriesViewModel = CategoriesViewModel.GetInstance();
-            categoriesViewModel.AddCategory(category);
+            categoriesViewModel.Add(category);
 
             await navigationService.BackOnMaster();
 

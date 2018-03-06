@@ -7,6 +7,8 @@
     using System.Windows.Input;
     using Xamarin.Forms;
     using Services;
+    using SQLite.Net.Attributes;
+    using SQLiteNetExtensions.Attributes;
 
     public class Category
     {

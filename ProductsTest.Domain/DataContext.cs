@@ -22,5 +22,7 @@
         public DbSet<Product> Products { get; set; }
 
         public System.Data.Entity.DbSet<ProductsTest.Domain.Customer> Customers { get; set; }
+
+        public System.Data.Entity.DbSet<ProductsTest.Domain.Ubication> Ubications { get; set; }
     }
 }

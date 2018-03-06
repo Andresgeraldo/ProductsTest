@@ -131,7 +131,7 @@
             }
 
             var categoriesViewModel = CategoriesViewModel.GetInstance();
-            categoriesViewModel.UpdateCategory(category);
+            categoriesViewModel.Update(category);
 
             await navigationService.BackOnMaster();
 
