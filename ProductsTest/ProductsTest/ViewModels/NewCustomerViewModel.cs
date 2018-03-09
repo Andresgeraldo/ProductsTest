@@ -4,6 +4,7 @@
     using System.Windows.Input;
     using GalaSoft.MvvmLight.Command;
     using Helpers;
+    using ProductsTest.Models;
     using Services;
 
     public class NewCustomerViewModel : INotifyPropertyChanged

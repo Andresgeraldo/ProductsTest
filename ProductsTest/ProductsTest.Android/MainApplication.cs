@@ -7,19 +7,45 @@ using Plugin.CurrentActivity;
 
 namespace ProductsTest.Droid
 {
-	//You can specify additional application information in this attribute
+    //You can specify additional application information in this attribute
     [Application]
     public class MainApplication : Application, Application.IActivityLifecycleCallbacks
     {
         public MainApplication(IntPtr handle, JniHandleOwnership transer)
-          :base(handle, transer)
+          : base(handle, transer)
         {
         }
 
+        #region Singleton
+        static MainActivity instance;
+
+        public static MainActivity GetInstance()
+        {
+            if (instance == null)
+            {
+                instance = new MainActivity();
+            }
+
+            return instance;
+        }
+        #endregion
+
+
+
         public override void OnCreate()
         {
-            base.OnCreate();
-            RegisterActivityLifecycleCallbacks(this);
+            instance = this;
+
+            //base.OnCreate();
+            //RegisterActivityLifecycleCallbacks(this);
+            ToolbarResource = Resource.Layout.Toolbar;
+
+            base.OnCreate(bundle);
+
+            global::Xamarin.Forms.Forms.Init(this, bundle);
+            Xamarin.FormsMaps.Init(this, bundle);
+            LoadApplication(new App());
+
             //A great place to initialize Xamarin.Insights and Dependency Services!
         }
 
@@ -59,5 +85,6 @@ namespace ProductsTest.Droid
         public void OnActivityStopped(Activity activity)
         {
         }
+
     }
 }

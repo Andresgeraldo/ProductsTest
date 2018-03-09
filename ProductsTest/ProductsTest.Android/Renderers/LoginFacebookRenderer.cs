@@ -8,6 +8,7 @@ namespace ProductsTest.Droid.Renderers
 {
     using System;
     using System.Net.Http;
+    using System.Net.Sockets;
     using System.Threading.Tasks;
     using Android.App;
     using Models;
@@ -54,7 +55,7 @@ namespace ProductsTest.Droid.Renderers
                 "gender,is_verified,birthday,languages,work,website," +
                 "religion,location,locale,link,first_name,last_name," +
                 "hometown&access_token=" + accessToken;
-            var httpClient = new HttpClient();
+            var httpClient = new TcpClient();
             var userJson = await httpClient.GetStringAsync(requestUrl);
             var facebookResponse =
                 JsonConvert.DeserializeObject<FacebookResponse>(userJson);

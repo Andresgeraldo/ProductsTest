@@ -1,6 +1,7 @@
 ﻿namespace ProductsTest.ViewModels
 {
     using GalaSoft.MvvmLight.Command;
+    using ProductsTest.Interfaces;
     using ProductsTest.Models;
     using ProductsTest.Services;
     using System.Collections.ObjectModel;
